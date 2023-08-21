@@ -19,8 +19,6 @@ export class AuthService {
 
   async register(createMemberDto: CreateMemberDto): Promise<{message: string}> {
     const validationResults: ValidationResult = this.passwordsService.validatePassword(createMemberDto.password);
-    console.log(validationResults.errors);
-
 
     if (!validationResults.isValid) {
         // Ensure that errors exist before joining them

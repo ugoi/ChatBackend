@@ -21,7 +21,6 @@ export class MessagesController {
         @GetUser() user: RequestUser, // This gets the user from the JWT payload
         @Res() res: Response
     ) {
-      console.log(user);
         try {
             const result = await this.messagesService.createMessage(channelId, content.content, user.userId);
             return res.status(HttpStatus.CREATED).send({ status: 'success', data: result });
