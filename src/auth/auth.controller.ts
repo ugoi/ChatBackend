@@ -1,64 +1,72 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
-import { UserService } from 'src/user/user.service';
+import { CreateMemberDto } from './dto/create-user.dto';
+import { LoginMemberDto } from './dto/login-user.dto';
+import { MemberService } from 'src/chat/member/member.service';
+import { Response } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/decorators/get-user/get-user.decorator';
+import { RequestUser } from './auth.types';
+import { Member } from 'src/chat/member/entities/member.entity';
+import { LocalAuthGuard } from './local-auth.guard';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
-@Controller('auth')
+@Controller({
+  path: 'auth',
+  version: '1',
+})
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UserService
+    private readonly memberService: MemberService
     ) {}
 
+
   @Post('register')
-  async register(@Body() createUserDto: CreateUserDto) {
-    let existingUser;
-    try {
-      existingUser = await this.userService.findUserByUsername(createUserDto.username);
-    } catch (error) {
-        console.log(error);
-        throw new HttpException({
-          status: HttpStatus.BAD_REQUEST,
-          error: 'FindUserByUsername failed',
-        }, HttpStatus.BAD_REQUEST, {
-          cause: error
-        });
-    }
-
-    if (existingUser) {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: 'User with this username already exists',
-      }, HttpStatus.BAD_REQUEST);
-    }
-
-    try {
-      return await this.authService.register(createUserDto);
-    } catch (error) {
-      throw new HttpException({
-        status: HttpStatus.BAD_REQUEST,
-        error: 'Registration failed',
-      }, HttpStatus.BAD_REQUEST, {
-        cause: error
-      });
-    }
+  async register(@Body() createMemberDto: CreateMemberDto, @Res() res: Response) {
+      const result = await this.authService.register(createMemberDto);
+      return res.status(HttpStatus.CREATED).send({ status: 'success', data: result });
   }
   
-
+  
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() loginUserDto: LoginUserDto) {
+  async login(
+    // @Body() loginMemberDto: LoginMemberDto,
+    @Res() res: Response,
+    @GetUser() user: Member,
+    ) {
     try {
-      console.log("Login");
-      return await this.authService.login(loginUserDto);
+      const { access_token } = await this.authService.login(user);
+
+      res.cookie('quantum_chat_auth_token', access_token, {
+        httpOnly: true,
+        // secure: true, // Use this in a HTTPS environment
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        // domain: 'your-domain.com', 
+        // path: '/',
+      });
+  
+      return res.status(HttpStatus.OK).send({ status: 'success' });
+
     } catch (error) {
       throw new HttpException({
-        status: HttpStatus.UNAUTHORIZED,
+        status: "error",
         error: 'Login failed',
       }, HttpStatus.UNAUTHORIZED, {
         cause: error
       });
     }
   }
-  
+
+  @UseGuards(JwtAuthGuard)
+  @Post('logout')
+  logout(@Res() response: Response) {
+    response.clearCookie('quantum_chat_auth_token', {
+        // If you set these attributes when setting the cookie, include them:
+        // path: '/',
+        // domain: '.yourdomain.com',
+    });
+    return response.status(HttpStatus.OK).json({ status: 'success', message: 'Logged out successfully' });
+  }
 }

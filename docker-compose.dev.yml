@@ -9,6 +9,7 @@ services:
       - 8000:3000
     volumes:
       - ./:/app
+      - node_modules_volume:/app/node_modules
     depends_on:
       - db
 
@@ -28,3 +29,5 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
+volumes:
+  node_modules_volume:

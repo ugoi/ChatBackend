@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthController } from './auth/auth.controller';
-import { AuthService } from './auth/auth.service';
-import { UserController } from './user/user.controller';
-import { UserService } from './user/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
+import { MemberModule } from './chat/member/member.module';
 import { AuthModule } from './auth/auth.module';
+import { ChatModule } from './chat/chat.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -21,8 +19,10 @@ import { AuthModule } from './auth/auth.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    UserModule,
+    MemberModule,
     AuthModule,
+    ChatModule,
+    CommonModule
   ],
   controllers: [AppController],
   providers: [AppService],
