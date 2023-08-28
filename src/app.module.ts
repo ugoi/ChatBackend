@@ -1,32 +1,46 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { MemberModule } from './chat/member/member.module';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
-import { CommonModule } from './common/common.module';
+import { UserModule } from './user/user.module';
+import databaseConfig from 'config/database.config';
+import authConfig from 'config/auth.config';
+import { DatabaseConfig } from 'config/types';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+
+const getOrmConfig = (configService: ConfigService<{ database: DatabaseConfig }>): TypeOrmModuleOptions => {
+    const dbConfig = configService.get('database', { infer: true });
+    return {
+        type: 'postgres' as const, // using `as const` to specify exact type
+        host: dbConfig.host,
+        port: dbConfig.port,
+        username: dbConfig.user,
+        password: dbConfig.password,
+        database: dbConfig.name,
+        autoLoadEntities: true,
+        synchronize: true,
+    };
+};
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'db', // name of the docker container running the DB
-      port: 5432,
-      username: 'root',
-      password: 'root',
-      database: 'admin', // this should match POSTGRES_DB in your docker-compose file
-      autoLoadEntities: true,
-      synchronize: true,
+    ConfigModule.forRoot({
+      load: [databaseConfig, authConfig],
+      cache: true,
     }),
-    MemberModule,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: getOrmConfig,
+      inject: [ConfigService],
+    }),
     AuthModule,
     ChatModule,
-    CommonModule
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-
-

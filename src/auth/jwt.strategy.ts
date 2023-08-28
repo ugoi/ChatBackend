@@ -3,16 +3,21 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload, RequestUser } from './auth.types';
+import { ConfigService } from '@nestjs/config';
+import { AuthConfig } from 'config/types';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(private jwtService: JwtService) {
+    constructor(
+        private jwtService: JwtService,
+        private configService: ConfigService<{auth: AuthConfig}>) {
+
         super({
             jwtFromRequest: ExtractJwt.fromExtractors([(request) => {
                 return request?.cookies?.quantum_chat_auth_token;
             }]),
             ignoreExpiration: false,
-            secretOrKey: 'SECRET_KEY', // Replace with your secret or fetch from config/environment
+            secretOrKey: configService.get('auth.jwt.expirationTime', { infer: true }),
         });
     }
 

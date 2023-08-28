@@ -1,12 +1,9 @@
 import { Body, Controller, HttpException, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateMemberDto } from './dto/create-user.dto';
-import { LoginMemberDto } from './dto/login-user.dto';
 import { MemberService } from 'src/chat/member/member.service';
 import { Response } from 'express';
-import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/decorators/get-user/get-user.decorator';
-import { RequestUser } from './auth.types';
 import { Member } from 'src/chat/member/entities/member.entity';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';

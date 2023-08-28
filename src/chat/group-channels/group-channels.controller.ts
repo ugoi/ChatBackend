@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Param, Post, UseGuards, HttpException, HttpStatus, Res } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { GroupChannelsService } from './group-channels.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
