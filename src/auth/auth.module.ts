@@ -1,22 +1,20 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
-// import { PassportModule } from '@nestjs/passport';
+import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { MemberService } from '../chat/member/member.service';
-import { MemberModule } from 'src/chat/member/member.module';
 import { Member } from 'src/chat/member/entities/member.entity';
 import { CommonModule } from 'src/common/common.module';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 import { PasswordsModule } from 'src/chat/passwords/passwords.module';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
-    forwardRef(() => MemberModule),
-    // PassportModule,
+    forwardRef(() => UserModule),
+    PassportModule,
     CommonModule,
     TypeOrmModule.forFeature([Member]),
     PasswordsModule,

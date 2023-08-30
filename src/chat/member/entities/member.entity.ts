@@ -9,9 +9,6 @@ export class Member {
   @Column({ unique: true })
   username: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  hashedPassword: string;
-
   @Column({ type: 'boolean', default: false })
   isBot: boolean;
 

@@ -1,12 +1,12 @@
 import { Body, Controller, HttpException, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateMemberDto } from './dto/create-user.dto';
-import { MemberService } from 'src/chat/member/member.service';
 import { Response } from 'express';
 import { GetUser } from 'src/decorators/get-user/get-user.decorator';
-import { Member } from 'src/chat/member/entities/member.entity';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller({
   path: 'auth',
@@ -15,13 +15,13 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly memberService: MemberService
+    private readonly memberService: UserService
     ) {}
 
 
   @Post('register')
-  async register(@Body() createMemberDto: CreateMemberDto, @Res() res: Response) {
-      const result = await this.authService.register(createMemberDto);
+  async register(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+      const result = await this.authService.register(createUserDto);
       return res.status(HttpStatus.CREATED).send({ status: 'success', data: result });
   }
   
@@ -29,9 +29,9 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(
-    // @Body() loginMemberDto: LoginMemberDto,
+    // @Body() loginUserDto: LoginUserDto,
     @Res() res: Response,
-    @GetUser() user: Member,
+    @GetUser() user: User,
     ) {
     try {
       const { access_token } = await this.authService.login(user);

@@ -1,24 +1,23 @@
 import { Injectable, UnauthorizedException, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateMemberDto } from './dto/create-user.dto';
-import { LoginMemberDto } from './dto/login-user.dto';
-import { MemberService } from '../chat/member/member.service';
-import { Member } from '../chat/member/entities/member.entity';
 import * as bcrypt from 'bcryptjs';
 import { RequestUser } from './auth.types';
 import { ValidationResult } from 'src/chat/passwords/passwords.types';
 import { PasswordsService } from 'src/chat/passwords/passwords.service';
+import { UserService } from 'src/user/user.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly memberService: MemberService,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly passwordsService: PasswordsService,
   ) {}
 
-  async register(createMemberDto: CreateMemberDto): Promise<{message: string}> {
-    const validationResults: ValidationResult = this.passwordsService.validatePassword(createMemberDto.password);
+  async register(createUserDto: CreateUserDto): Promise<{message: string}> {
+    const validationResults: ValidationResult = this.passwordsService.validatePassword(createUserDto.password);
 
     if (!validationResults.isValid) {
         // Ensure that errors exist before joining them
@@ -29,25 +28,25 @@ export class AuthService {
         throw new BadRequestException(`Password validation failed due to: ${errorMessage}`);
     }
     
-    const existingMember = await this.memberService.findMemberByMembername(createMemberDto.username);
-    if (existingMember) {
+    const existingUser = await this.userService.findUserByUsername(createUserDto.username);
+    if (existingUser) {
       throw new HttpException({
         status: "error",
-        error: 'Member with this username already exists',
+        error: 'User with this username already exists',
       }, HttpStatus.BAD_REQUEST);
     }
 
-    const hashedPassword = await bcrypt.hash(createMemberDto.password, 10);
-    await this.memberService.createMember({
-      ...createMemberDto,
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    await this.userService.createUser({
+      ...createUserDto,
       hashedPassword: hashedPassword,
     });
 
-    return { message: 'Member registration successful' };
+    return { message: 'User registration successful' };
   }
 
-  async validateUser(username: string, password: string): Promise<Member> {
-    const user = await this.memberService.findMemberByMembername(username);
+  async validateUser(username: string, password: string): Promise<User> {
+    const user = await this.userService.findUserByUsername(username);
     if (user && await bcrypt.compare(password, user.hashedPassword)) {
       return user; // Return user details without sensitive data
     }
@@ -55,7 +54,7 @@ export class AuthService {
   }
 
 
-  async login(user: Member): Promise<{ access_token: string }> {
+  async login(user: User): Promise<{ access_token: string }> {
     const payload = { username: user.username, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
