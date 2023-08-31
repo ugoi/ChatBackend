@@ -45,6 +45,26 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Running the app in Docker
+
+### With VS Code Shortcuts
+
+With VS Code, you can utilize specific shortcuts for Docker interactions:
+
+- **Run the app in Docker**: `Ctrl + Shift + B`
+- **Docker commands**: `Ctrl + Shift + P` (Press Tasks: Run tasks)
+
+### Using Docker Compose
+
+```bash
+# To start the app in development mode using the specific compose file
+$ docker-compose -f docker-compose.dev.yml up
+
+# For other npm commands, you can exec into the container:
+# Example for starting in watch mode:
+$ docker-compose exec <service-name> npm run start:dev
+```
+
 ## Test
 
 ```bash
