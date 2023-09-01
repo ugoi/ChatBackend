@@ -2,11 +2,11 @@ import { Injectable, UnauthorizedException, HttpException, HttpStatus, BadReques
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { RequestUser } from './auth.types';
-import { ValidationResult } from 'src/chat/passwords/passwords.types';
-import { PasswordsService } from 'src/chat/passwords/passwords.service';
 import { UserService } from 'src/user/user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from 'src/user/entities/user.entity';
+import { PasswordsService } from 'src/passwords/passwords.service';
+import { ValidationResult } from 'src/passwords/passwords.types';
 
 @Injectable()
 export class AuthService {

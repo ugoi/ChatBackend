@@ -3,15 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { GroupChannel } from './entities/group-channel.entity';
-import { PasswordsService } from '../passwords/passwords.service';
-import { ValidationResult } from '../passwords/passwords.types';
+import { ChatPasswordsService } from '../chat-passwords/chat-passwords.service';
+import { ChatValidationResult } from '../chat-passwords/chat-passwords.types';
 
 @Injectable()
 export class GroupChannelsService {
     constructor(
         @InjectRepository(GroupChannel)
         private groupChannelRepository: Repository<GroupChannel>,
-        private readonly passwordsService: PasswordsService
+        private readonly passwordsService: ChatPasswordsService
     ) {}
 
     async createGroupChannel(title: string, isPublic: boolean, password?: string): Promise<GroupChannel> {
@@ -20,7 +20,7 @@ export class GroupChannelsService {
         groupChannel.isPublic = isPublic;
 
         if (password) {
-            const validationResults: ValidationResult = this.passwordsService.validatePassword(password);
+            const validationResults: ChatValidationResult = this.passwordsService.validatePassword(password);
 
             if (!validationResults.isValid) {
                 // Ensure that errors exist before joining them

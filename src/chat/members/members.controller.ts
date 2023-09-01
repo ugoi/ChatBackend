@@ -1,4 +1,7 @@
 import { Controller } from '@nestjs/common';
 
-@Controller('member')
+@Controller({
+    path: 'group_channels/members',
+    version: '1',
+  })
 export class MemberController {}

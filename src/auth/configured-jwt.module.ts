@@ -24,4 +24,4 @@ import { AuthConfig } from 'config/types';
         JwtModule
     ]
 })
-export class CommonModule {}
+export class ConfiguredJwtModule {}

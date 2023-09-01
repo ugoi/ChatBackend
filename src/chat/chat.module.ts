@@ -4,13 +4,11 @@ import { ChatService } from './chat.service';
 import { MessageModule } from './messages/messages.module';
 import { BotsModule } from './bots/bots.module';
 import { GroupChannelsModule } from './group-channels/group-channels.module';
-import { PasswordsService } from './passwords/passwords.service';
-import { PasswordsModule } from './passwords/passwords.module';
 
 @Module({
   controllers: [ChatController],
-  providers: [ChatService, PasswordsService],
+  providers: [ChatService],
   exports: [ChatService],
-  imports: [MessageModule, GroupChannelsModule, BotsModule, PasswordsModule]
+  imports: [MessageModule, GroupChannelsModule, BotsModule]
 })
 export class ChatModule {}

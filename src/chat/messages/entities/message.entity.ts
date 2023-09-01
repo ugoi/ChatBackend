@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-import { Member } from 'src/chat/member/entities/member.entity';
+import { Member } from 'src/chat/members/entities/member.entity';
 import { GroupChannel } from '../../group-channels/entities/group-channel.entity';
 
 @Entity('messages')

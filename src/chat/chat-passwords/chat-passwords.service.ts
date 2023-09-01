@@ -2,11 +2,11 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import * as PasswordValidator from 'password-validator';
-import { ValidationResult } from './passwords.types';
+import { ChatValidationResult } from './chat-passwords.types';
 
 
 @Injectable()
-export class PasswordsService {
+export class ChatPasswordsService {
 
     public getPasswordSchema(): PasswordValidator {
         const schema = new PasswordValidator();
@@ -22,7 +22,7 @@ export class PasswordsService {
         return schema;
     }
 
-    public validatePassword(password: string): ValidationResult {
+    public validatePassword(password: string): ChatValidationResult {
         const schema = this.getPasswordSchema();
         const validationResult = schema.validate(password, { list: true });
     
@@ -35,9 +35,7 @@ export class PasswordsService {
         }
     
         throw new Error('Unexpected validation result');
-    }
-    
-    
+    }   
     
     public async hashPassword(password: string): Promise<string> {
         const saltRounds = 10;

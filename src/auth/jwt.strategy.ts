@@ -17,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                 return request?.cookies?.quantum_chat_auth_token;
             }]),
             ignoreExpiration: false,
-            secretOrKey: configService.get('auth.jwt.expirationTime', { infer: true }),
+            secretOrKey: configService.get('auth.jwt.secret', { infer: true }),
         });
     }
 
