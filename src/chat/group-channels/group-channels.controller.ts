@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Param, Post, UseGuards, HttpException, HttpStatus, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { GroupChannelsService } from './group-channels.service';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ChatJwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller({
   path: 'group_channels',
@@ -12,7 +12,7 @@ export class GroupChannelsController {
       private readonly groupChannelsService: GroupChannelsService
       ) {}
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(ChatJwtAuthGuard)
     @Post()
     async createGroupChannel(
         @Body() createChannelDto: { title: string; isPublic: boolean; password?: string },

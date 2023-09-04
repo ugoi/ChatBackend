@@ -2,7 +2,7 @@ import { Body, Controller, Param, Post, UseGuards, HttpException, HttpStatus, Re
 import { BotsService } from './bots.service';
 import { Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ChatJwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller({
   path: 'bots',
@@ -13,7 +13,7 @@ export class BotsController {
 
     // ... Other bot-specific endpoints ...
   
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(ChatJwtAuthGuard)
     @Post(':botId/messages')
     async sendBotMessage(@Param('botId') botId: string, @Body() content: any, @Res() res: Response) {
       try {

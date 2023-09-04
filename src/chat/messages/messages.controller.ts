@@ -1,10 +1,9 @@
 import { Body, Controller, Delete, Param, Post, UseGuards, HttpException, HttpStatus, Res } from '@nestjs/common';
-import { GetUser } from 'src/decorators/get-user/get-user.decorator';
-import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { MessageService } from './messages.service';
-import { RequestUser } from 'src/auth/auth.types';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { ChatRequestUser } from '../auth/chat-auth.types';
+import { GetMember } from '../decorators/get-user/get-user.decorator';
+import { ChatJwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller({
     path: 'group_channels',
@@ -13,12 +12,12 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class MessagesController {
     constructor(private readonly messagesService: MessageService) {}
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(ChatJwtAuthGuard)
     @Post(':channelId/messages')
     async createMessage(
         @Param('channelId') channelId: string,
         @Body() content: any,
-        @GetUser() user: RequestUser, // This gets the user from the JWT payload
+        @GetMember() user: ChatRequestUser, // This gets the user from the JWT payload
         @Res() res: Response
     ) {
         try {
@@ -34,7 +33,7 @@ export class MessagesController {
         }
     }
   
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(ChatJwtAuthGuard)
     @Delete(':channelId/messages/:messageId')
     async deleteMessage(@Param('channelId') channelId: string, @Param('messageId') messageId: string, @Res() res: Response) {
         try {
