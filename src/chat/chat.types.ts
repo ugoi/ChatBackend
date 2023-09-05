@@ -1,4 +1,5 @@
 export interface ChatModuleOptions {
+  db: {
     type: string;
     host: string;
     port: number;
@@ -7,4 +8,5 @@ export interface ChatModuleOptions {
     database: string;
     autoLoadEntities: boolean;
     synchronize: boolean;
-  }
+  };
+}

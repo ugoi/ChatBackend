@@ -29,16 +29,19 @@ const getOrmConfig = (configService: ConfigService<{ database: DatabaseConfig }>
 const getChatModuleConfig = (configService: ConfigService<{ database: DatabaseConfig }>): ChatModuleOptions => {
   const dbConfig = configService.get('database', { infer: true });
   return {
-      type: 'postgres',
-      host: dbConfig.host,
-      port: dbConfig.port,
-      username: dbConfig.user,
-      password: dbConfig.password,
-      database: dbConfig.name,
-      autoLoadEntities: true,
-      synchronize: true,
+      db: {
+        type: 'postgres',
+        host: dbConfig.host,
+        port: dbConfig.port,
+        username: dbConfig.user,
+        password: dbConfig.password,
+        database: dbConfig.name,
+        autoLoadEntities: true,
+        synchronize: true,
+      }
   };
 };
+
 
 
 @Module({
