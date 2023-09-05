@@ -4,20 +4,7 @@ import { ChatService } from './chat.service';
 import { MessageModule } from './messages/messages.module';
 import { BotsModule } from './bots/bots.module';
 import { GroupChannelsModule } from './group-channels/group-channels.module';
-import { ConfigModule } from '@nestjs/config';
-
-// Configuration interfaces
-export interface ChatModuleOptions {
-    type: string;
-    host: string;
-    port: number;
-    username: string;
-    password: string;
-    database: string;
-    autoLoadEntities?: boolean;
-    synchronize?: boolean;
-    // ... any other needed properties
-}
+import { ChatModuleOptions } from './chat.types';
 
 export interface ChatModuleAsyncOptions {
   useFactory: (...args: any[]) => Promise<ChatModuleOptions> | ChatModuleOptions;

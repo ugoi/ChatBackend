@@ -4,23 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { ChatModule } from './chat/chat.module';
 import { UserModule } from './user/user.module';
 import databaseConfig from 'config/database.config';
 import authConfig from 'config/auth.config';
 import { DatabaseConfig } from 'config/types';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-
-interface ChatModuleOptions {
-  type: string;
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-  database: string;
-  autoLoadEntities: boolean;
-  synchronize: boolean;
-}
+import { ChatModule, ChatModuleOptions } from './chat';
 
 
 const getOrmConfig = (configService: ConfigService<{ database: DatabaseConfig }>): TypeOrmModuleOptions => {
