@@ -1,6 +1,6 @@
 export interface ChatModuleOptions {
   db: {
-    type: string;
+    type: any;
     host: string;
     port: number;
     username: string;
@@ -9,4 +9,12 @@ export interface ChatModuleOptions {
     autoLoadEntities: boolean;
     synchronize: boolean;
   };
+  inject?: any[];
+  imports?: any[];
+}
+
+export interface ChatModuleAsyncOptions {
+  useFactory: (...args: any[]) => Promise<ChatModuleOptions> | ChatModuleOptions;
+  inject?: any[];
+  imports?: any[];
 }

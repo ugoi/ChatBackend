@@ -15,7 +15,7 @@ import { ChatModule, ChatModuleOptions } from './chat';
 const getOrmConfig = (configService: ConfigService<{ database: DatabaseConfig }>): TypeOrmModuleOptions => {
     const dbConfig = configService.get('database', { infer: true });
     return {
-        type: 'postgres' as const, // using `as const` to specify exact type
+        type: 'postgres',
         host: dbConfig.host,
         port: dbConfig.port,
         username: dbConfig.user,
@@ -41,7 +41,6 @@ const getChatModuleConfig = (configService: ConfigService<{ database: DatabaseCo
       }
   };
 };
-
 
 
 @Module({
