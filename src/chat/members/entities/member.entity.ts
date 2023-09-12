@@ -1,4 +1,4 @@
-import { GroupChannel } from 'src/chat/group-channels/entities/group-channel.entity';
+import { GroupChannel } from '../../group-channels/entities/group-channel.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('members')

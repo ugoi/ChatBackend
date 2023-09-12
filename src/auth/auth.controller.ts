@@ -1,12 +1,12 @@
 import { Body, Controller, HttpException, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
-import { GetUser } from 'src/decorators/get-user/get-user.decorator';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { UserService } from 'src/user/user.service';
-import { User } from 'src/user/entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { GetUser } from '../decorators/get-user/get-user.decorator';
+import { User } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
 
 @Controller({
   path: 'auth',

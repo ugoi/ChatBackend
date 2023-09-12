@@ -1,7 +1,8 @@
-import { AuthGuard } from './auth.guard';
+import { ChatJwtAuthGuard } from "./jwt-auth.guard";
+
 
 describe('AuthGuard', () => {
   it('should be defined', () => {
-    expect(new AuthGuard()).toBeDefined();
+    expect(new ChatJwtAuthGuard()).toBeDefined();
   });
 });
