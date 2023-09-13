@@ -9,6 +9,7 @@ import { AuthConfig } from 'config/types';
             imports: [ConfigModule],
             useFactory: async (configService: ConfigService<{ auth: AuthConfig }>) => {
                 const authConfig = configService.get<AuthConfig>('auth');
+                console.log('Auth Config:', authConfig);
                 
                 return {
                     secret: authConfig.jwt.secret,
