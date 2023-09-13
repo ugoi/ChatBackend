@@ -7,9 +7,9 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { DatabaseConfig } from 'config/types';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ChatModule, ChatModuleOptions } from './chat';
 import databaseConfig from '../config/database.config';
 import authConfig from '../config/auth.config';
+import { ChatModule, ChatModuleOptions } from '../libs/chat/src';
 
 
 const getOrmConfig = (configService: ConfigService<{ database: DatabaseConfig }>): TypeOrmModuleOptions => {
