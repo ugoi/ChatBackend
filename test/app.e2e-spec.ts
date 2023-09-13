@@ -1,11 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, Logger } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-  const logger = new Logger('E2E Test');
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -14,11 +13,6 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
-
-    // Log environment variables
-    for (const [key, value] of Object.entries(process.env)) {
-      logger.debug(`${key}: ${value}`);
-    }
   });
 
   it('/ (GET)', () => {
