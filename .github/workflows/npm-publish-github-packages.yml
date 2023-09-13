@@ -29,6 +29,9 @@ jobs:
           BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           JWT_EXPIRATION_TIME: ${{ secrets.JWT_EXPIRATION_TIME }}
+
+      - name: List running containers
+        run: docker ps
           
       - name: Execute tests inside the Docker container
         run: |
