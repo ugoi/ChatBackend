@@ -32,21 +32,6 @@ jobs:
 
       - name: List running containers
         run: docker ps
-
-      - name: Compare environment variables
-        run: |
-          [ "${{ secrets.POSTGRES_DB }}" == "admin" ] && echo "POSTGRES_DB: true" || echo "POSTGRES_DB: false"
-          [ "${{ secrets.POSTGRES_USER }}" == "root" ] && echo "POSTGRES_USER: true" || echo "POSTGRES_USER: false"
-          [ "${{ secrets.POSTGRES_PASSWORD }}" == "root" ] && echo "POSTGRES_PASSWORD: true" || echo "POSTGRES_PASSWORD: false"
-          [ "${{ secrets.POSTGRES_PORT_HOST }}" == "54320" ] && echo "POSTGRES_PORT_HOST: true" || echo "POSTGRES_PORT_HOST: false"
-          [ "${{ secrets.POSTGRES_PORT }}" == "5432" ] && echo "POSTGRES_PORT: true" || echo "POSTGRES_PORT: false"
-          [ "${{ secrets.POSTGRES_HOST }}" == "db" ] && echo "POSTGRES_HOST: true" || echo "POSTGRES_HOST: false"
-          [ "${{ secrets.BACKEND_PORT_HOST }}" == "8000" ] && echo "BACKEND_PORT_HOST: true" || echo "BACKEND_PORT_HOST: false"
-          [ "${{ secrets.BACKEND_PORT }}" == "3000" ] && echo "BACKEND_PORT: true" || echo "BACKEND_PORT: false"
-          [ "${{ secrets.JWT_SECRET }}" == "SECRET_KEY" ] && echo "JWT_SECRET: true" || echo "JWT_SECRET: false"
-          [ "${{ secrets.JWT_EXPIRATION_TIME }}" == "60m" ] && echo "JWT_EXPIRATION_TIME: true" || echo "JWT_EXPIRATION_TIME: false"
-      
-      
           
       - name: Execute tests inside the container
         run: docker exec chatbackend_backend_1 sh -c "npm i -g @nestjs/cli && npm i && npm test && npm run test:e2e"
@@ -67,7 +52,7 @@ jobs:
       - run: npm i -g @nestjs/cli
       - run: npm i
       - run: npm run build:lib
-      - run: npm run pack
+      - run: npm pack
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
