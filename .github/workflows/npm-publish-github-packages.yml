@@ -32,6 +32,20 @@ jobs:
 
       - name: List running containers
         run: docker ps
+
+      - name: Log environment variables
+        run: |
+          echo "POSTGRES_DB: ${{ secrets.POSTGRES_DB }}"
+          echo "POSTGRES_USER: ${{ secrets.POSTGRES_USER }}"
+          echo "POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}"
+          echo "POSTGRES_PORT_HOST: ${{ secrets.POSTGRES_PORT_HOST }}"
+          echo "POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}"
+          echo "POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}"
+          echo "BACKEND_PORT_HOST: ${{ secrets.BACKEND_PORT_HOST }}"
+          echo "BACKEND_PORT: ${{ secrets.BACKEND_PORT }}"
+          echo "JWT_SECRET: ${{ secrets.JWT_SECRET }}"
+          echo "JWT_EXPIRATION_TIME: ${{ secrets.JWT_EXPIRATION_TIME }}"
+      
           
       - name: Execute tests inside the container
         run: docker exec chatbackend_backend_1 sh -c "npm i -g @nestjs/cli && npm i && npm test && npm run test:e2e"
