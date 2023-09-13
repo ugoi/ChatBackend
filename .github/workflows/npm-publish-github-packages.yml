@@ -12,15 +12,27 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 'lts/*'
-      - run: npm i -g @nestjs/cli
-      - run: npm i
-      - run: npm test
-      - run: npm run test:e2e
+      
+      - name: Start services using Docker Compose
+        run: docker-compose -f docker-compose.dev.yml up --build -d
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PORT_HOST: ${{ secrets.POSTGRES_PORT_HOST }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          BACKEND_PORT_HOST: ${{ secrets.BACKEND_PORT_HOST }}
+          BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRATION_TIME: ${{ secrets.JWT_EXPIRATION_TIME }}
+          
+      - name: Execute tests inside the Docker container
+        run: |
+          docker exec chatbackend-backend-1 sh -c "npm i -g @nestjs/cli && npm i && npm test && npm run test:e2e"
 
   publish-gpr:
     needs: build
@@ -39,7 +51,7 @@ jobs:
       - run: npm run build:lib
       - run: npm run pack
         env:
-          GITHUB_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
