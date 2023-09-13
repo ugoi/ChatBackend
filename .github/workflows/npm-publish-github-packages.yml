@@ -33,18 +33,19 @@ jobs:
       - name: List running containers
         run: docker ps
 
-      - name: Log environment variables
+      - name: Compare environment variables
         run: |
-          echo "POSTGRES_DB: ${{ secrets.POSTGRES_DB }}"
-          echo "POSTGRES_USER: ${{ secrets.POSTGRES_USER }}"
-          echo "POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}"
-          echo "POSTGRES_PORT_HOST: ${{ secrets.POSTGRES_PORT_HOST }}"
-          echo "POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}"
-          echo "POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}"
-          echo "BACKEND_PORT_HOST: ${{ secrets.BACKEND_PORT_HOST }}"
-          echo "BACKEND_PORT: ${{ secrets.BACKEND_PORT }}"
-          echo "JWT_SECRET: ${{ secrets.JWT_SECRET }}"
-          echo "JWT_EXPIRATION_TIME: ${{ secrets.JWT_EXPIRATION_TIME }}"
+          [ "${{ secrets.POSTGRES_DB }}" == "admin" ] && echo "POSTGRES_DB: true" || echo "POSTGRES_DB: false"
+          [ "${{ secrets.POSTGRES_USER }}" == "root" ] && echo "POSTGRES_USER: true" || echo "POSTGRES_USER: false"
+          [ "${{ secrets.POSTGRES_PASSWORD }}" == "root" ] && echo "POSTGRES_PASSWORD: true" || echo "POSTGRES_PASSWORD: false"
+          [ "${{ secrets.POSTGRES_PORT_HOST }}" == "54320" ] && echo "POSTGRES_PORT_HOST: true" || echo "POSTGRES_PORT_HOST: false"
+          [ "${{ secrets.POSTGRES_PORT }}" == "5432" ] && echo "POSTGRES_PORT: true" || echo "POSTGRES_PORT: false"
+          [ "${{ secrets.POSTGRES_HOST }}" == "db" ] && echo "POSTGRES_HOST: true" || echo "POSTGRES_HOST: false"
+          [ "${{ secrets.BACKEND_PORT_HOST }}" == "8000" ] && echo "BACKEND_PORT_HOST: true" || echo "BACKEND_PORT_HOST: false"
+          [ "${{ secrets.BACKEND_PORT }}" == "3000" ] && echo "BACKEND_PORT: true" || echo "BACKEND_PORT: false"
+          [ "${{ secrets.JWT_SECRET }}" == "SECRET_KEY" ] && echo "JWT_SECRET: true" || echo "JWT_SECRET: false"
+          [ "${{ secrets.JWT_EXPIRATION_TIME }}" == "60m" ] && echo "JWT_EXPIRATION_TIME: true" || echo "JWT_EXPIRATION_TIME: false"
+      
       
           
       - name: Execute tests inside the container
