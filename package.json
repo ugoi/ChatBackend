@@ -1,11 +1,20 @@
 {
-  "name": "ChatBackend",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
+  "name": "@ugoi/chat",
+  "version": "0.0.0",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "description": "Plugin for setting up chat backend quickly",
+  "author": "ugoi",
+  "private": false,
   "license": "UNLICENSED",
+  "main": "dist/libs/chat/index.js",
+    "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
+    "build:lib": "nest build chat",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
@@ -88,8 +97,12 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^ugoi/chat(|/.*)$": "<rootDir>/libs/chat/src/$1"
+      "^@local/chat(|/.*)$": "<rootDir>/libs/chat/src/$1"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ugoi/ChatBackend.git"
   },
   "config": {
     "commitizen": {

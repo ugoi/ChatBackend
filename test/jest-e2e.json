@@ -11,7 +11,7 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "moduleNameMapper": {
-    "ugoi/chat/(.*)": "<rootDir>/../libs/chat/src/$1",
-    "ugoi/chat": "<rootDir>/../libs/chat/src"
+    "@local/chat/(.*)": "<rootDir>/../libs/chat/src/$1",
+    "@local/chat": "<rootDir>/../libs/chat/src"
   }
 }

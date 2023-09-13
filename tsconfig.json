@@ -18,10 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "ugoi/chat": [
+      "@local/chat": [
         "libs/chat/src"
       ],
-      "ugoi/chat/*": [
+      "@local/chat/*": [
         "libs/chat/src/*"
       ]
     }
