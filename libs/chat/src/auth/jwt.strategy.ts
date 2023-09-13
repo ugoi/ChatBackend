@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthConfig } from 'config/types';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class ChatJwtStrategy extends PassportStrategy(Strategy) {
     constructor(
         private jwtService: JwtService,
         private configService: ConfigService<{auth: AuthConfig}>) {
