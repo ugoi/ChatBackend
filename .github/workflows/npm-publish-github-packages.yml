@@ -29,12 +29,9 @@ jobs:
           BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           JWT_EXPIRATION_TIME: ${{ secrets.JWT_EXPIRATION_TIME }}
-
-      - name: List running containers
-        run: docker ps
           
       - name: Execute tests inside the container
-        run: docker exec chatbackend_backend_1 sh -c "npm i -g @nestjs/cli && npm i && npm test && npm run test:e2e"
+        run: docker exec chatbackend_backend_1 sh -c "npm i -g @nestjs/cli && npm ci && npm test && npm run test:e2e"
       
 
   publish-gpr:
@@ -50,7 +47,7 @@ jobs:
           node-version: 'lts/*'
           registry-url: https://npm.pkg.github.com/
       - run: npm i -g @nestjs/cli
-      - run: npm i
+      - run: npm ci
       - run: npm run build:lib
       - run: npm pack
         env:
