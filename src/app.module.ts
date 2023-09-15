@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { DatabaseConfig } from 'config/types';
+import { AuthConfig, DatabaseConfig } from 'config/types';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import databaseConfig from '../config/database.config';
 import authConfig from '../config/auth.config';
@@ -26,21 +26,27 @@ const getOrmConfig = (configService: ConfigService<{ database: DatabaseConfig }>
     };
 };
 
-const getChatModuleConfig = (configService: ConfigService<{ database: DatabaseConfig }>): ChatModuleOptions => {
+const getChatModuleConfig = (configService: ConfigService<{ database: DatabaseConfig, auth: AuthConfig }>): ChatModuleOptions => {
   const dbConfig = configService.get('database', { infer: true });
+  const authConfig = configService.get('auth', { infer: true });
   return {
       db: {
-        type: 'postgres',
-        host: dbConfig.host,
-        port: dbConfig.port,
-        username: dbConfig.user,
-        password: dbConfig.password,
-        database: dbConfig.name,
-        autoLoadEntities: true,
-        synchronize: true,
+          type: 'postgres',
+          host: dbConfig.host,
+          port: dbConfig.port,
+          username: dbConfig.user,
+          password: dbConfig.password,
+          database: dbConfig.name,
+          autoLoadEntities: true,
+          synchronize: true,
+      },
+      jwt: {
+          secret: authConfig.jwt.secret,
+          expirationTime: authConfig.jwt.expirationTime,
       }
   };
 };
+
 
 
 @Module({

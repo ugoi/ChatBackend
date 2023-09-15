@@ -6,10 +6,11 @@ import { BotsModule } from './bots/bots.module';
 import { GroupChannelsModule } from './group-channels/group-channels.module';
 import { ChatModuleAsyncOptions, ChatModuleOptions } from './chat.types';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChatAuthModule } from './auth/chat-auth.module';
 
 
 @Module({
-    imports: [MessageModule, GroupChannelsModule, BotsModule],
+    imports: [MessageModule, GroupChannelsModule, BotsModule, ChatAuthModule],
     controllers: [ChatController],
     providers: [ChatService],
     exports: [ChatService],
@@ -18,6 +19,7 @@ export class ChatModule {
     static forRoot(options: ChatModuleOptions): DynamicModule {
         const imports = [
             ...options.imports,
+            ChatAuthModule.forRoot(options),
             TypeOrmModule.forRoot({
                 type: options.db.type,  // Adjust as per your DB
                 host: options.db.host,
@@ -44,6 +46,11 @@ export class ChatModule {
     static forRootAsync(options: ChatModuleAsyncOptions): DynamicModule {
         const imports = [
             ...options.imports,
+            ChatAuthModule.forRootAsync({
+                useFactory: options.useFactory,
+                inject: options.inject || [],
+                imports: options.imports || []
+            }),
             TypeOrmModule.forRootAsync({
                 useFactory: async (...args: any[]) => {
                     const chatOptions: ChatModuleOptions = await options.useFactory(...args);
@@ -76,6 +83,5 @@ export class ChatModule {
             ],
         };
     }
-    
   
 }

@@ -1,3 +1,8 @@
+export interface JwtConfig {
+  secret: string;
+  expirationTime: string;
+}
+
 export interface ChatModuleOptions {
   db: {
     type: any;
@@ -9,6 +14,7 @@ export interface ChatModuleOptions {
     autoLoadEntities: boolean;
     synchronize: boolean;
   };
+  jwt: JwtConfig;
   inject?: any[];
   imports?: any[];
 }

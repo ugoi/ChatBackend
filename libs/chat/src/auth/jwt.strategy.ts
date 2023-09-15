@@ -1,23 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import { JwtService } from '@nestjs/jwt';
 import { ChatJwtPayload, ChatRequestUser } from './chat-auth.types';
-import { ConfigService } from '@nestjs/config';
-import { AuthConfig } from 'config/types';
+import { ChatModuleOptions } from '../chat.types';
 
 @Injectable()
 export class ChatJwtStrategy extends PassportStrategy(Strategy) {
     constructor(
-        private jwtService: JwtService,
-        private configService: ConfigService<{auth: AuthConfig}>) {
-
+        @Inject('CHAT_AUTH_MODULE_OPTIONS') private readonly chatAuthOptions: ChatModuleOptions
+    ) {
         super({
             jwtFromRequest: ExtractJwt.fromExtractors([(request) => {
                 return request?.cookies?.quantum_chat_auth_token;
             }]),
             ignoreExpiration: false,
-            secretOrKey: configService.get('auth.jwt.secret', { infer: true }),
+            secretOrKey: chatAuthOptions.jwt.secret,  // <-- use secret from options
         });
     }
 
